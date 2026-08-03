@@ -1,10 +1,10 @@
   const { Client, GatewayIntentBits } = require('discord.js');
 const puppeteer = require('puppeteer-core');
 const chromium = require('@sparticuz/chromium');
-const http = require('http');
+const http = http = require('http'); // falls du 'http' verwendest
 require('dotenv').config();
 
-// Mini-Webserver für Render
+// Mini-Webserver für Render (damit der Port-Check nicht fehlschlägt)
 const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Bot is running!\n');
@@ -95,3 +95,4 @@ client.on('messageCreate', async message => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+      
