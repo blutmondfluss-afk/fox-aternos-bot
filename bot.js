@@ -6,19 +6,18 @@ require('dotenv').config();
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 async function startAternosServer(message) {
   let browser;
   let statusMessage;
   try {
     statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
-    browser = await puppeteer.launch({
-      headless: false,
-      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-      userDataDir: './puppeteer-profile',
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      defaultViewport: null
+  Browser = erwarten PuppenspielerDieStart({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    userDataDir: './puppeteer-profile',
+});
+    
     });
 
     const page = await browser.newPage();
