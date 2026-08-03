@@ -24,13 +24,17 @@ async function startAternosServer(message) {
     try {
         statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
-        browser = await puppeteer.launch({
+            browser = await puppeteer.launch({
             headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            userDataDir: './puppeteer-profile'
-        });
-
-        const page = await browser.newPage();
+            args: [
+                '--no-sandbox', 
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--disable-gpu'
+            ],
+            channel: 'chrome
+ const page = await browser.newPage();
         await page.setRequestInterception(true);
         page.on('request', req => {
             if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
