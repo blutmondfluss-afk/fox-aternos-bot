@@ -4,19 +4,13 @@ const puppeteer = require('puppeteer-core');
 require('dotenv').config();
 
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-async function startAternosServer(message) {
-  let browser;
-  let statusMessage;
-  try {
-    statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
+  return new Promise(resolve => setTimeout(resolve, ms))
 
-  async function startAternosServer(Nachricht) {
+ async function startAternosServer(message) {
     let browser;
     let statusMessage;
     try {
-        statusMessage = await Nachricht.reply('⏳ Verbindung zu Aternos wird hergestellt und der Server wird gestartet...');
+        statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
         browser = await puppeteer.launch({
             headless: true,
@@ -25,6 +19,7 @@ async function startAternosServer(message) {
         });
 
         const page = await browser.newPage();
+      
       
 });
     
