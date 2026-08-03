@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 const http = require('http');
 require('dotenv').config();
 
-// Mini-Webserver für Render, damit der Port-Scan nicht fehlschlägt
+// Mini-Webserver für Render (damit der Port-Scan nicht fehlschlägt)
 const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Bot is running!\n');
@@ -24,7 +24,7 @@ async function startAternosServer(message) {
     try {
         statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
-            browser = await puppeteer.launch({
+        browser = await puppeteer.launch({
             headless: true,
             args: [
                 '--no-sandbox', 
@@ -32,9 +32,10 @@ async function startAternosServer(message) {
                 '--disable-dev-shm-usage',
                 '--disable-accelerated-2d-canvas',
                 '--disable-gpu'
-            ],
-            channel: 'chrome
- const page = await browser.newPage();
+            ]
+        });
+
+        const page = await browser.newPage();
         await page.setRequestInterception(true);
         page.on('request', req => {
             if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
@@ -101,4 +102,3 @@ client.on('messageCreate', async message => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-              
