@@ -1,10 +1,10 @@
-  const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const puppeteer = require('puppeteer-core');
 const chromium = require('@sparticuz/chromium');
-const http = http = require('http'); // falls du 'http' verwendest
+const http = require('http');
 require('dotenv').config();
 
-// Mini-Webserver für Render (damit der Port-Check nicht fehlschlägt)
+// Mini-Webserver für Render
 const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Bot is running!\n');
@@ -29,6 +29,10 @@ async function startAternosServer(message) {
         });
 
         const page = await browser.newPage();
+        
+        // User-Agent setzen, damit Aternos uns nicht sofort wie einen Bot aussperrt
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
+
         await page.setRequestInterception(true);
         page.on('request', req => {
             if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
@@ -38,7 +42,8 @@ async function startAternosServer(message) {
             }
         });
 
-        await page.goto('https://aternos.org/go/', { waitUntil: 'domcontentloaded', timeout: 60000 });
+        // Großzügigerer Timeout (90 Sekunden)
+        await page.goto('https://aternos.org/go/', { waitUntil: 'networkidle2', timeout: 90000 });
 
         const alreadyLoggedIn = await page.$('a[href="/servers/"]');
         if (alreadyLoggedIn) {
@@ -47,20 +52,21 @@ async function startAternosServer(message) {
             const loginFrame = page.frames().find(f => f.url().includes('aternos'));
             if (!loginFrame) throw new Error('Login frame not found');
 
-            await loginFrame.waitForSelector('input#user', { timeout: 5000 });
+            await loginFrame.waitForSelector('input#user', { timeout: 15000 });
             await loginFrame.type('input#user', process.env.ATERNOS_USER, { delay: 50 });
             await loginFrame.type('input#password', process.env.ATERNOS_PASS, { delay: 50 });
             await loginFrame.click('button[type="submit"]');
         }
 
-        await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
-        await page.goto('https://aternos.org/servers/', { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 60000 }).catch(() => {});
+        await page.goto('https://aternos.org/servers/', { waitUntil: 'networkidle2', timeout: 90000 });
 
-        await page.waitForSelector('div.server-body', { timeout: 15000 });
+        // Warten bis der Server-Body da ist
+        await page.waitForSelector('div.server-body', { timeout: 30000 });
         await page.click('div.server-body');
 
-        await page.waitForSelector('#start', { timeout: 20000 });
-        
+        // Warten auf den Start-Button und klicken
+        await page.waitForSelector('#start', { timeout: 30000 });
         const startBtn = await page.$('#start');
         if (startBtn) {
             await startBtn.click();
@@ -69,7 +75,7 @@ async function startAternosServer(message) {
         await statusMessage.edit('✅ Server is starting up!');
     } catch (err) {
         console.error('Error starting Aternos server:', err);
-        if (statusMessage) await statusMessage.edit('❌ Failed to start Aternos server.');
+        if (statusMessage) await statusMessage.edit('❌ Timeout or error while starting Aternos server. Check Render logs.');
     } finally {
         if (browser) await browser.close();
     }
@@ -95,4 +101,4 @@ client.on('messageCreate', async message => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-      
+          
