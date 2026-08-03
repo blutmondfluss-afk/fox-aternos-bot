@@ -1,9 +1,10 @@
   const { Client, GatewayIntentBits } = require('discord.js');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
+const chromium = require('@sparticuz/chromium');
 const http = require('http');
 require('dotenv').config();
 
-// Mini-Webserver für Render (damit der Port-Scan nicht fehlschlägt)
+// Mini-Webserver für Render
 const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Bot is running!\n');
@@ -20,16 +21,12 @@ async function startAternosServer(message) {
     try {
         statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
+        // Nutzen von @sparticuz/chromium für Render
         browser = await puppeteer.launch({
-            headless: true,
-            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
-            args: [
-                '--no-sandbox', 
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--disable-gpu'
-            ]
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless,
         });
 
         const page = await browser.newPage();
