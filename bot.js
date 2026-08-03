@@ -21,7 +21,6 @@ async function startAternosServer(message) {
     try {
         statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
-        // Nutzen von @sparticuz/chromium für Render
         browser = await puppeteer.launch({
             args: chromium.args,
             defaultViewport: chromium.defaultViewport,
