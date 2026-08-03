@@ -12,10 +12,20 @@ async function startAternosServer(message) {
   try {
     statusMessage = await message.reply('⏳ Connecting to Aternos and starting the server...');
 
-  Browser = erwarten PuppenspielerDieStart({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    userDataDir: './puppeteer-profile',
+  async function startAternosServer(Nachricht) {
+    let browser;
+    let statusMessage;
+    try {
+        statusMessage = await Nachricht.reply('⏳ Verbindung zu Aternos wird hergestellt und der Server wird gestartet...');
+
+        browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            userDataDir: './puppeteer-profile'
+        });
+
+        const page = await browser.newPage();
+      
 });
     
     });
