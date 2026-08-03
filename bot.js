@@ -26,8 +26,6 @@ async function startAternosServer(message) {
             } else {
                 req.continue();
             }
-        }):
-
     await page.goto('https://aternos.org/go/', { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     // Handle login or redirect
