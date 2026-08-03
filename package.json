@@ -1,7 +1,15 @@
 {
+  "name": "fox-aternos-bot",
+  "version": "1.0.0",
+  "description": "Discord Bot to start Aternos",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
   "dependencies": {
-    "discord.js": "^14.20.0",
-    "dotenv": "^16.5.0",
-    "puppeteer": "^24.10.2"
+    "@sparticuz/chromium": "^123.0.0",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "puppeteer-core": "^22.6.0"
   }
 }
