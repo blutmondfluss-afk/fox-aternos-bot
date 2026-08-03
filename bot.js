@@ -1,6 +1,18 @@
   const { Client, GatewayIntentBits } = require('discord.js');
 const puppeteer = require('puppeteer');
+const http = require('http');
 require('dotenv').config();
+
+// Mini-Webserver für Render, damit der Port-Scan nicht fehlschlägt
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Bot is running!\n');
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`HTTP server listening on port ${PORT}`);
+});
 
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -51,7 +63,6 @@ async function startAternosServer(message) {
 
         await page.waitForSelector('#start', { timeout: 20000 });
         
-        // Handle potential popups/dialogs
         const startBtn = await page.$('#start');
         if (startBtn) {
             await startBtn.click();
@@ -86,4 +97,4 @@ client.on('messageCreate', async message => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-    
+              
