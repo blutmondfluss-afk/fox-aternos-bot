@@ -14,10 +14,6 @@ server.listen(PORT, () => {
     console.log(`HTTP server listening on port ${PORT}`);
 });
 
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 async function startAternosServer(message) {
     let browser;
     let statusMessage;
@@ -26,6 +22,7 @@ async function startAternosServer(message) {
 
         browser = await puppeteer.launch({
             headless: true,
+            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox',
