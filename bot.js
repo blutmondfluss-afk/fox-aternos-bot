@@ -1,12 +1,12 @@
-// Updated bot.js for Aternos Discord bot with vignette handling and improved server status polling
 const { Client, GatewayIntentBits } = require('discord.js');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 require('dotenv').config();
 
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
- async function startAternosServer(message) {
+async function startAternosServer(message) {
     let browser;
     let statusMessage;
     try {
@@ -19,21 +19,14 @@ function delay(ms) {
         });
 
         const page = await browser.newPage();
-      
-      
-});
-    
-    });
-
-    const page = await browser.newPage();
-    await page.setRequestInterception(true);
-    page.on('request', req => {
-      if (["image", "stylesheet", "font"].includes(req.resourceType())) {
-        req.abort();
-      } else {
-        req.continue();
-      }
-    });
+        await page.setRequestInterception(true);
+        page.on('request', req => {
+            if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
+                req.abort();
+            } else {
+                req.continue();
+            }
+        }):
 
     await page.goto('https://aternos.org/go/', { waitUntil: 'domcontentloaded', timeout: 60000 });
 
